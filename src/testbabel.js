@@ -17,3 +17,15 @@ var bob = {
       console.log(this._name + " knows " + f));
   }
 };
+
+class Test {
+
+    getItems(){
+        return [];
+
+    }
+
+    saveItem(item){
+
+    }
+}
