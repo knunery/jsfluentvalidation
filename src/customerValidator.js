@@ -5,7 +5,7 @@ class ValidationResult {
 	}
 
 	isValid() {
-		return this.errors.length > 0;
+		return this.errors.length === 0;
 	};
 }
 
@@ -25,9 +25,11 @@ class AbstractValidator
 	}
 
 	validate(){
-		return new ValidationResult(new [
-			new ValidationError("firstName", "firstName cannot be null")
-		]);
+		return new ValidationResult(
+			[
+				new ValidationError("firstName", "firstName cannot be null")
+			]
+		);
 	}
 
 	static RuleFor(propertyName)
@@ -52,7 +54,9 @@ class RuleBuilder {
 
 		this.addRule(NotNullorEmptyValidator);
 	};
+
 }
+
 
 class CustomerValidator extends AbstractValidator
 {

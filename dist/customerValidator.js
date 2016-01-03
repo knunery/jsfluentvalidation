@@ -19,7 +19,7 @@ var ValidationResult = (function () {
 	_createClass(ValidationResult, [{
 		key: "isValid",
 		value: function isValid() {
-			return this.errors.length > 0;
+			return this.errors.length === 0;
 		}
 	}]);
 
@@ -43,7 +43,7 @@ var AbstractValidator = (function () {
 	_createClass(AbstractValidator, [{
 		key: "validate",
 		value: function validate() {
-			return new ValidationResult(new [new ValidationError("firstName", "firstName cannot be null")]());
+			return new ValidationResult([new ValidationError("firstName", "firstName cannot be null")]);
 		}
 	}], [{
 		key: "RuleFor",
