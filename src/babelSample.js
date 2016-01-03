@@ -20,12 +20,12 @@ var bob = {
 
 class Test {
 
-    getItems(){
-        return [];
+  getItems() {
+    return [];
 
-    }
+  }
 
-    saveItem(item){
+  saveItem(item) {
 
-    }
+  }
 }

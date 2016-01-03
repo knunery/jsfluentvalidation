@@ -10,43 +10,38 @@ class ValidationResult {
 }
 
 class ValidationError {
-	constructor(propertyName, error)
-	{
+	constructor(propertyName, error) {
 		this.propertyName = propertyName;
 		this.errorMessage = error;
 	}
 }
 
-class AbstractValidator
-{
-	constructor()
-	{
+class AbstractValidator {
+	constructor() {
 		//this.rules = 
 	}
 
-	validate(){
+	validate() {
 		return new ValidationResult(
 			[
 				new ValidationError("firstName", "firstName cannot be null")
 			]
-		);
+			);
 	}
 
-	static RuleFor(propertyName)
-	{
+	static RuleFor(propertyName) {
 		//return new RuleBuilder(propertyName);
 	}
 }
 
 class RuleBuilder {
-	
-	constructor(propertyName){
+
+	constructor(propertyName) {
 		this.propertyName = propertyName;
 		this.rule = [];
 	}
 
-	addRule(rule)
-	{
+	addRule(rule) {
 		this.rule.push(rule);
 	}
 
@@ -58,29 +53,24 @@ class RuleBuilder {
 }
 
 
-class CustomerValidator extends AbstractValidator
-{
-	contstructor()
-	{
-		 RuleFor("firstName").notNullOrUndefined();
+class CustomerValidator extends AbstractValidator {
+	contstructor() {
+		RuleFor("firstName").notNullOrUndefined();
 	}
 }
 
-class NotNullorEmptyValidator
-{
-	constructor(context)
-	{
+class NotNullorEmptyValidator {
+	constructor(context) {
 		//this.context = context;
 	}
 
-	isValid(context){
-			if(context.propertyValue === null || context.propertyValue === undefined)
-			{
-				return false;
-			}
-				return true;
-
+	isValid(context) {
+		if (context.propertyValue === null || context.propertyValue === undefined) {
+			return false;
 		}
+		return true;
+
+	}
 
 }
 
