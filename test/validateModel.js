@@ -1,6 +1,5 @@
 var assert = require('assert');
-require("../dist/validator"); 
-var customerValidator = require("../dist/customerValidator"); 
+var customerValidator = require("../dist/validator"); 
 
 describe('Customer Validation', function() {
   describe('#validate()', function () {
