@@ -6,12 +6,24 @@ describe('Customer Validation', function() {
     it('should fail when firstName is null', function () {
       var customer = {firstName: null};
 
-console.log(customerValidator);
 	   var validator = new customerValidator.CustomerValidator();
 
       var validationResult = validator.validate(customer);
 
       assert.equal(false, validationResult.isValid());
+      assert.equal(1, validationResult.errors.length);
     });
+
+    it('should not fail when firstName is not null', function() {
+    	var customer = {firstName: "jessica"};
+
+	   var validator = new customerValidator.CustomerValidator();
+
+      var validationResult = validator.validate(customer);
+
+      assert.equal(true, validationResult.isValid());
+      assert.equal(0, validationResult.errors.length);
+    });
+
   });
 });
