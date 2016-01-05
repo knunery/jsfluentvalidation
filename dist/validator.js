@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -17,7 +17,7 @@ var ValidationResult = (function () {
 	}
 
 	_createClass(ValidationResult, [{
-		key: "isValid",
+		key: 'isValid',
 		value: function isValid() {
 			return this.errors.length === 0;
 		}
@@ -35,19 +35,48 @@ var ValidationError = function ValidationError(propertyName, error) {
 
 var AbstractValidator = (function () {
 	function AbstractValidator() {
-		//this.rules =
-
 		_classCallCheck(this, AbstractValidator);
+
+		console.log('AbstractValidator constructor');
+		this.rules = [];
 	}
 
 	_createClass(AbstractValidator, [{
-		key: "validate",
-		value: function validate() {
-			return new ValidationResult([new ValidationError("firstName", "firstName cannot be null")]);
+		key: 'validate',
+		value: function validate(model) {
+			console.log('validate model');
+			console.log(this.rules);
+			var errors = [];
+
+			this.rules.forEach(function (rule) {
+				console.log("rule.propertyName - " + rule.propertyName);
+				console.log(rule.validators);
+
+				var propertyName = rule.propertyName;
+				var propertyValue = model[propertyName];
+
+				rule.validators.forEach(function (validator) {
+					var validatorInstance = new validator();
+					console.log(propertyValue);
+					var context = { propertyValue: propertyValue };
+
+					if (validatorInstance.isValid(context) === false) {
+						errors.push(new ValidationError(propertyName, "firstName cannot be null"));
+					}
+				});
+			});
+
+			return new ValidationResult(errors);
 		}
-	}], [{
-		key: "RuleFor",
+	}, {
+		key: 'RuleFor',
 		value: function RuleFor(propertyName) {
+			console.log('RuleFor' + propertyName);
+			var ruleBuilder = new RuleBuilder(propertyName);
+
+			this.rules.push(ruleBuilder);
+
+			return ruleBuilder;
 			//return new RuleBuilder(propertyName);
 		}
 	}]);
@@ -59,20 +88,22 @@ var RuleBuilder = (function () {
 	function RuleBuilder(propertyName) {
 		_classCallCheck(this, RuleBuilder);
 
+		console.log("RuleBuilder constructor");
+
 		this.propertyName = propertyName;
-		this.rule = [];
+		this.validators = [];
 	}
 
 	_createClass(RuleBuilder, [{
-		key: "addRule",
-		value: function addRule(rule) {
-			this.rule.push(rule);
+		key: 'addValidator',
+		value: function addValidator(validator) {
+			this.validators.push(validator);
 		}
 	}, {
-		key: "isNotNullOrEmpty",
-		value: function isNotNullOrEmpty() {
+		key: 'notNullOrUndefined',
+		value: function notNullOrUndefined() {
 
-			this.addRule(NotNullorEmptyValidator);
+			this.addValidator(NotNullorEmptyValidator);
 		}
 	}]);
 
@@ -85,28 +116,24 @@ var CustomerValidator = (function (_AbstractValidator) {
 	function CustomerValidator() {
 		_classCallCheck(this, CustomerValidator);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(CustomerValidator).apply(this, arguments));
-	}
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CustomerValidator).call(this));
 
-	_createClass(CustomerValidator, [{
-		key: "contstructor",
-		value: function contstructor() {
-			RuleFor("firstName").notNullOrUndefined();
-		}
-	}]);
+		_this.RuleFor("firstName").notNullOrUndefined();
+		return _this;
+	}
 
 	return CustomerValidator;
 })(AbstractValidator);
 
 var NotNullorEmptyValidator = (function () {
-	function NotNullorEmptyValidator(context) {
+	function NotNullorEmptyValidator() {
 		//this.context = context;
 
 		_classCallCheck(this, NotNullorEmptyValidator);
 	}
 
 	_createClass(NotNullorEmptyValidator, [{
-		key: "isValid",
+		key: 'isValid',
 		value: function isValid(context) {
 			if (context.propertyValue === null || context.propertyValue === undefined) {
 				return false;

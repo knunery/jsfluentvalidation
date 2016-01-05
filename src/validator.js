@@ -18,18 +18,45 @@ class ValidationError {
 
 class AbstractValidator {
 	constructor() {
-		//this.rules = 
+		console.log('AbstractValidator constructor');
+		this.rules = [];
 	}
 
-	validate() {
-		return new ValidationResult(
-			[
-				new ValidationError("firstName", "firstName cannot be null")
-			]
-			);
+	validate(model) {
+		console.log('validate model');
+		console.log(this.rules);
+		var errors = [];
+
+		this.rules.forEach(function(rule) {
+			console.log("rule.propertyName - " + rule.propertyName);
+			console.log(rule.validators);
+
+			var propertyName = rule.propertyName;
+			var propertyValue = model[propertyName];
+
+			rule.validators.forEach(function (validator){
+				var validatorInstance = new validator();
+				console.log(propertyValue);
+				var context = {propertyValue: propertyValue};
+
+				if(validatorInstance.isValid(context) === false)
+				{
+					errors.push(new ValidationError(propertyName, "firstName cannot be null"));
+				}
+			});
+		});
+
+		return new ValidationResult(errors);
 	}
 
-	static RuleFor(propertyName) {
+
+	RuleFor(propertyName) {
+		console.log('RuleFor' + propertyName);
+		var ruleBuilder = new RuleBuilder(propertyName);
+
+		this.rules.push( ruleBuilder );
+
+		return ruleBuilder;
 		//return new RuleBuilder(propertyName);
 	}
 }
@@ -37,30 +64,34 @@ class AbstractValidator {
 class RuleBuilder {
 
 	constructor(propertyName) {
+		console.log("RuleBuilder constructor");
+
 		this.propertyName = propertyName;
-		this.rule = [];
+		this.validators = [];
 	}
 
-	addRule(rule) {
-		this.rule.push(rule);
+	addValidator(validator) {
+		this.validators.push(validator);
 	}
 
-	isNotNullOrEmpty() {
+	notNullOrUndefined() {
 
-		this.addRule(NotNullorEmptyValidator);
+		this.addValidator(NotNullorEmptyValidator);
+
 	};
 
 }
 
 
 class CustomerValidator extends AbstractValidator {
-	contstructor() {
-		RuleFor("firstName").notNullOrUndefined();
+	constructor() {
+		super();
+		this.RuleFor("firstName").notNullOrUndefined();
 	}
 }
 
 class NotNullorEmptyValidator {
-	constructor(context) {
+	constructor() {
 		//this.context = context;
 	}
 
