@@ -4,7 +4,7 @@ var customerValidator = require("../dist/validator");
 describe('Customer Validation', function() {
   describe('#validate()', function () {
     it('should fail when firstName is null', function () {
-      var customer = {firstName: null};
+      var customer = {firstName: null, lastName: "jones"};
 
 	   var validator = new customerValidator.CustomerValidator();
 
@@ -15,7 +15,7 @@ describe('Customer Validation', function() {
     });
 
     it('should not fail when firstName is not null', function() {
-    	var customer = {firstName: "jessica"};
+    	var customer = {firstName: "jessica", lastName: "jones"};
 
 	   var validator = new customerValidator.CustomerValidator();
 

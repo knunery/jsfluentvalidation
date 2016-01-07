@@ -56,7 +56,9 @@ var AbstractValidator = (function () {
 				var propertyValue = model[propertyName];
 
 				rule.validators.forEach(function (validator) {
-					var validatorInstance = new validator();
+					//var validatorInstance = new validator();
+					var validatorInstance = validator;
+
 					console.log(propertyValue);
 					var context = { propertyValue: propertyValue };
 
@@ -103,7 +105,12 @@ var RuleBuilder = (function () {
 		key: 'notNullOrUndefined',
 		value: function notNullOrUndefined() {
 
-			this.addValidator(NotNullorEmptyValidator);
+			this.addValidator(new NotNullorEmptyValidator());
+		}
+	}, {
+		key: 'length',
+		value: function length(min, max) {
+			this.addValidator(new LengthValidator(min, max));
 		}
 	}]);
 
@@ -119,6 +126,7 @@ var CustomerValidator = (function (_AbstractValidator) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CustomerValidator).call(this));
 
 		_this.RuleFor("firstName").notNullOrUndefined();
+		_this.RuleFor("lastName").length(1, 10);
 		return _this;
 	}
 
@@ -143,6 +151,30 @@ var NotNullorEmptyValidator = (function () {
 	}]);
 
 	return NotNullorEmptyValidator;
+})();
+
+var LengthValidator = (function () {
+	function LengthValidator(min, max) {
+		_classCallCheck(this, LengthValidator);
+
+		this.min = min;
+		this.max = max;
+	}
+
+	_createClass(LengthValidator, [{
+		key: 'isValid',
+		value: function isValid(context) {
+			if (typeof context.propertyValue !== "string") {
+				return false;
+			}
+
+			if (context.propertyValue.legnth < this.min || context.propertyValue.length > this.max) return false;
+
+			return true;
+		}
+	}]);
+
+	return LengthValidator;
 })();
 
 exports.CustomerValidator = CustomerValidator;

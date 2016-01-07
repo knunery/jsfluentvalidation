@@ -35,7 +35,9 @@ class AbstractValidator {
 			var propertyValue = model[propertyName];
 
 			rule.validators.forEach(function (validator){
-				var validatorInstance = new validator();
+				//var validatorInstance = new validator();
+				var validatorInstance = validator;
+
 				console.log(propertyValue);
 				var context = {propertyValue: propertyValue};
 
@@ -76,9 +78,13 @@ class RuleBuilder {
 
 	notNullOrUndefined() {
 
-		this.addValidator(NotNullorEmptyValidator);
+		this.addValidator(new NotNullorEmptyValidator());
 
 	};
+
+	length(min, max) {
+		this.addValidator(new LengthValidator(min, max));
+	}
 
 }
 
@@ -87,6 +93,7 @@ class CustomerValidator extends AbstractValidator {
 	constructor() {
 		super();
 		this.RuleFor("firstName").notNullOrUndefined();
+		this.RuleFor("lastName").length(1,10);
 	}
 }
 
@@ -103,6 +110,24 @@ class NotNullorEmptyValidator {
 
 	}
 
+}
+
+class LengthValidator {
+	constructor(min, max) {
+		this.min = min;
+		this.max = max;
+	}
+
+	isValid(context) {
+		if(typeof context.propertyValue !== "string") {
+			return false;
+		}
+
+		if (context.propertyValue.legnth < this.min || context.propertyValue.length > this.max)
+			return false;
+
+		return true;
+	}
 }
 
 exports.CustomerValidator = CustomerValidator;
