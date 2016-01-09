@@ -195,4 +195,21 @@ var EmailValidator = (function () {
 	return EmailValidator;
 })();
 
+var LessThanValidator = (function () {
+	function LessThanValidator(value) {
+		_classCallCheck(this, LessThanValidator);
+
+		this.value = value;
+	}
+
+	_createClass(LessThanValidator, [{
+		key: 'isValid',
+		value: function isValid(context) {
+			return context.propertyValue < this.value;
+		}
+	}]);
+
+	return LessThanValidator;
+})();
+
 exports.CustomerValidator = CustomerValidator;

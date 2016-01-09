@@ -142,4 +142,14 @@ class EmailValidator {
 	}
 }
 
+class LessThanValidator {
+	constructor(value) {
+		this.value = value;	
+	}
+
+	isValid(context) {
+		return context.propertyValue < this.value;
+	}
+}
+
 exports.CustomerValidator = CustomerValidator;
