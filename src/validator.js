@@ -152,4 +152,14 @@ class LessThanValidator {
 	}
 }
 
+class MoreThanValidator {
+	constructor(value) {
+		this.value = value;
+	}
+
+	isValid(context) {
+		return context.propertyValue > this.value;
+	}
+}
+
 exports.CustomerValidator = CustomerValidator;

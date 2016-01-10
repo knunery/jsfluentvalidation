@@ -212,4 +212,21 @@ var LessThanValidator = (function () {
 	return LessThanValidator;
 })();
 
+var MoreThanValidator = (function () {
+	function MoreThanValidator(value) {
+		_classCallCheck(this, MoreThanValidator);
+
+		this.value = value;
+	}
+
+	_createClass(MoreThanValidator, [{
+		key: 'isValid',
+		value: function isValid(context) {
+			return context.propertyValue > this.value;
+		}
+	}]);
+
+	return MoreThanValidator;
+})();
+
 exports.CustomerValidator = CustomerValidator;
