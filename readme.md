@@ -10,7 +10,7 @@ Uses ES2015 and Babeljs.
 class CustomerValidator extends AbstractValidator {
 	constructor() {
 		super();
-		this.RuleFor("firstName").notNullOrUndefined();
+		this.RuleFor("firstName").notNullOrUndefined().maxLength(50);
 		this.RuleFor("lastName").length(1,10);
 		this.RuleFor("email").emailAddress();
 	}
